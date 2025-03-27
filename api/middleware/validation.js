@@ -46,8 +46,7 @@ const hospitalRules = {
       .isLength({ max: 100 }).withMessage('State cannot exceed 100 characters'),
     body('zipCode')
       .optional()
-      .trim()
-      .matches(/^[0-9]{5}(-[0-9]{4})?$/).withMessage('Invalid ZIP code format'),
+      .trim(),
     body('contactPerson')
       .optional()
       .trim()
@@ -241,7 +240,6 @@ const authRules = {
     body('password')
       .notEmpty().withMessage('Password is required'),
     body('role')
-      .optional()
       .isIn(['admin', 'hospital', 'user']).withMessage('Invalid role'),
     validateRequest
   ]

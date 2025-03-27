@@ -13,6 +13,8 @@ import {
   Alert 
 } from '@mui/material';
 
+import {login} from '../services/auth'
+
 const LoginPage = ({ onLogin }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [email, setEmail] = useState('');
@@ -36,7 +38,7 @@ const LoginPage = ({ onLogin }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Simple validation
@@ -49,9 +51,9 @@ const LoginPage = ({ onLogin }) => {
 
     // In a real app, you would make an API call to authenticate
     // This is just a simulation
-    if (email === `${role}@example.com` && password === 'password') {
+    const data= await login({email,password,role})
+    if (data.user) {
       onLogin(role);
-      
       // Redirect based on role
       navigate(`/${role}`);
     } else {

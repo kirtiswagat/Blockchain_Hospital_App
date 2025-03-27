@@ -12,6 +12,7 @@ import {
   Snackbar, 
   Alert 
 } from '@mui/material';
+import { Hospital } from '../../services/registerHostptalService';
 
 const RegisterHospital = () => {
   const [formData, setFormData] = useState({
@@ -40,7 +41,7 @@ const RegisterHospital = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Validate form
@@ -53,8 +54,11 @@ const RegisterHospital = () => {
       return;
     }
     
+    try {
+
+    const result = await Hospital({...formData,...{  "password":"password"}  });
     // In a real app, you would make an API call to save the hospital
-    console.log('Hospital data:', formData);
+    console.log('Hospital data:', result);
     
     // Show success message
     setSnackbar({
@@ -75,6 +79,12 @@ const RegisterHospital = () => {
       phone: '',
       isActive: true
     });
+      
+    } catch (error) {
+      
+    }
+
+    
   };
 
   const handleCloseSnackbar = () => {

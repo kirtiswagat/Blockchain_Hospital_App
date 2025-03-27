@@ -1,5 +1,5 @@
 // components/Admin/RegisterUser.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Box, 
   Paper, 
@@ -17,8 +17,10 @@ import {
   MenuItem
 } from '@mui/material';
 import { createUser } from '../../services/userService';
+import { getHospital } from '../../services/registerHostptalService';
 
 const RegisterUser = () => {
+  const [hospitals,sehospitals]=useState([])
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -38,11 +40,25 @@ const RegisterUser = () => {
   });
 
   // Mock hospital list - in a real app, you would fetch this from an API
-  const hospitals = [
-    { id: '1', name: 'General Hospital' },
-    { id: '2', name: 'City Medical Center' },
-    { id: '3', name: 'Community Healthcare' }
-  ];
+  
+
+  useEffect(()=>{
+
+   async function fetch (){
+
+    const result= await getHospital();
+
+    console.log(result)
+
+    sehospitals([...result.hospitals.map((item)=>({
+      id: item.id, name: item.name
+
+    }))]);
+   }
+   fetch()
+
+
+  },[])
 
   const handleChange = (e) => {
     const { name, value, checked, type } = e.target;
@@ -72,7 +88,7 @@ const RegisterUser = () => {
     
     try {
       // Call API to create user
-      const result = await createUser(formData);
+      const result = await createUser({...formData,...{  "password":"password"}  });
       console.log('User created:', result);
       
       // Show success message
@@ -90,7 +106,8 @@ const RegisterUser = () => {
         phone: '',
         role: 'patient',
         hospitalId: '',
-        isActive: true
+        isActive: true,
+      
       });
     } catch (err) {
       console.error('Error submitting form:', err);

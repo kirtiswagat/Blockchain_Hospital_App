@@ -11,9 +11,10 @@ exports.createUser = async (req, res) => {
     phone,
     role,
     hospitalId,
-    password,
+    password="password",
     isActive = true
   } = req.body;
+
 
   // Basic validation
   if (!firstName || !lastName || !email || !password || !role) {
